@@ -1,3 +1,4 @@
+export 'element_type/modbus_element.dart';
 export 'element_type/modbus_element_bit.dart';
 export 'element_type/modbus_element_num.dart';
 export 'element_type/modbus_element_enum.dart';
