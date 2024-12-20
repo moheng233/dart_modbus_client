@@ -1,5 +1,6 @@
 import 'package:modbus_client/src/element_type/modbus_element.dart';
 
+import 'modbus_request.dart';
 import 'modbus_response.dart';
 import 'modbus_type.dart';
 
