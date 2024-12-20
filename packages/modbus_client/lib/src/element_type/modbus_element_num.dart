@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../modbus_client.dart';
+import '../modbus_type.dart';
 import 'modbus_element.dart';
 
 /// A numeric register where [type] can be [ModbusElementType.inputRegister] or

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../modbus_client.dart';
+import 'modbus_type.dart';
 
 sealed class ModbusResponse {
   final ModbusResponseCode responseCode;

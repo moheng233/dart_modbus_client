@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
-import '../modbus_client.dart';
 import 'element_type/modbus_element.dart';
 import 'modbus_response.dart';
+import 'modbus_type.dart';
 
 /// The base Modbus request
 ///

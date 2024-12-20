@@ -1,6 +1,9 @@
 import 'dart:typed_data';
 
-import '../../modbus_client.dart';
+import '../modbus_app_logger.dart';
+import '../modbus_request.dart';
+import '../modbus_type.dart';
+import 'modbus_client_serial.dart';
 
 /// The serial Modbus ASCII client class.
 class ModbusClientSerialAsciiBase extends ModbusClientSerial {

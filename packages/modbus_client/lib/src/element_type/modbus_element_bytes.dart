@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
-import '../../modbus_client.dart';
+import '../modbus_request.dart';
+import '../modbus_type.dart';
 import 'modbus_element.dart';
 
 /// This register type reads and writes byte array.

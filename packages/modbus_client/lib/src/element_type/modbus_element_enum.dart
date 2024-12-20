@@ -7,8 +7,6 @@ abstract interface class ModbusIntEnum {
   int get intValue;
 }
 
-
-
 /// An enumeration register. The Uin16 register value is converted into a user
 /// defined enumeration.
 /// Example:
@@ -28,7 +26,8 @@ abstract interface class ModbusIntEnum {
 ///     name: "BatteryStatus",
 ///     address: 37000,
 ///     enumValues: BatteryStatus.values);
-final class ModbusEnumRegister<T extends ModbusIntEnum> extends ModbusElement<T> {
+final class ModbusEnumRegister<T extends ModbusIntEnum>
+    extends ModbusElement<T> {
   final List<T> enumValues;
   final T? defaultValue;
 
@@ -46,7 +45,7 @@ final class ModbusEnumRegister<T extends ModbusIntEnum> extends ModbusElement<T>
     assert(raw.isNotEmpty);
     return enumValues.firstWhere((v) => v.intValue == raw[0]);
   }
-  
+
   @override
   Uint16List encodeValue(T value) {
     return Uint16List.fromList([value.intValue]);

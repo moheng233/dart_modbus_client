@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../modbus_client.dart';
+import '../modbus_type.dart';
 import 'modbus_element.dart';
 
 /// A Modbus bit value element. This is the base class of [ModbusDiscreteInput]
