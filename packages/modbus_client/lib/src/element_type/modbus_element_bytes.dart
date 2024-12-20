@@ -5,18 +5,18 @@ import 'modbus_element.dart';
 
 /// This register type reads and writes byte array.
 ///
-/// The [byteCount] cannot exceed 250 bytes which is the multiple read
+/// The [wordCount] cannot exceed 250 bytes which is the multiple read
 /// bytes limit for Modbus/RTU. Note that the protocol limit depends on multiple
 /// factors:
 ///  - Read & Write have different limits
 ///  - Modbus RTU and TCP have different limits
 ///  - Device dependent limits
 /// To get the right limit please refer to Modbus specs and your device manual.
-class ModbusBytesRegister extends ModbusElement<Uint8List> {
+final class ModbusBytesRegister extends ModbusElement<Uint8List> {
   const ModbusBytesRegister({
     required super.name,
     required super.address,
-    required super.byteCount,
+    required super.wordCount,
     super.description,
     super.type = ModbusElementType.holdingRegister,
   });
@@ -38,7 +38,7 @@ class ModbusBytesRegister extends ModbusElement<Uint8List> {
       Duration? responseTimeout,
       ModbusEndianness? endianness}) {
     // Expecting a same length as the original byte count
-    if (value.length != byteCount) {
+    if (value.length != wordCount) {
       throw ModbusException(
           context: "ModbusBytesRegister",
           msg: "The length of 'value' must match 'byteCount'!");

@@ -5,7 +5,6 @@ import 'package:test/test.dart';
 
 void main() {
   group("Tests endianness for uint32", () {
-    final num = 4159429653;
     test('uint32 AB CD', () {
       final bytes = Uint8List.fromList([0xF7, 0xEB, 0xDC, 0x15]);
       var reg = ModbusUint32Register(
@@ -50,7 +49,6 @@ void main() {
       final bytes = Uint8List.fromList([0xF7, 0xEB, 0xDC, 0x15]);
       var reg = ModbusInt32Register(
           name: "int32", address: 14, type: ModbusElementType.holdingRegister);
-      var write = reg.getWriteRequest(-135537643);
 
       expect(reg.decodeValue(Uint16List.view(bytes.buffer)), num);
     });
@@ -61,7 +59,6 @@ void main() {
           address: 14,
           type: ModbusElementType.holdingRegister,
           endianness: ModbusEndianness.DCBA);
-      var write = reg.getWriteRequest(-135537643);
 
       expect(reg.decodeValue(Uint16List.view(bytes.buffer)), num);
     });
@@ -72,7 +69,6 @@ void main() {
           address: 14,
           type: ModbusElementType.holdingRegister,
           endianness: ModbusEndianness.BADC);
-      var write = reg.getWriteRequest(-135537643);
 
       expect(reg.decodeValue(Uint16List.view(bytes.buffer)), num);
     });
@@ -83,7 +79,6 @@ void main() {
           address: 14,
           type: ModbusElementType.holdingRegister,
           endianness: ModbusEndianness.CDAB);
-      var write = reg.getWriteRequest(-135537643);
 
       expect(reg.decodeValue(Uint16List.view(bytes.buffer)), num);
     });

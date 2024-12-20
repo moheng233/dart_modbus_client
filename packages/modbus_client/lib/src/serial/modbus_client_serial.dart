@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
 import 'package:synchronized/synchronized.dart';
 
 import '../../modbus_client.dart';
@@ -12,25 +13,31 @@ abstract class ModbusClientSerial extends ModbusClient {
   ModbusSerialPort serialPort;
   final Lock _lock = Lock();
 
-  ModbusClientSerial(
-      {required this.serialPort,
-      super.unitId,
-      super.connectionMode = ModbusConnectionMode.autoConnectAndKeepConnected,
-      super.responseTimeout = const Duration(seconds: 3)});
+  ModbusClientSerial({
+    required this.serialPort,
+    super.unitId,
+    super.connectionMode = ModbusConnectionMode.autoConnectAndKeepConnected,
+    super.responseTimeout = const Duration(seconds: 3),
+  });
 
   /// Returns the serial telegram checksum length
   int get checksumByteCount;
 
   /// Returns the modbus telegram out of this request's PDU
+  @protected
   Uint8List getTxTelegram(ModbusRequest request, int unitId);
 
   /// Read response from device.
+  @protected
   Future<ModbusResponseCode> readResponseHeader(
-      ModbusSerialResponse response, Duration timeout);
+    ModbusSerialResponse response,
+    Duration timeout,
+  );
 
   /// Reads the full pdu response from device.
   ///
   /// NOTE: response header should be read already!
+  @protected
   Future<ModbusResponseCode> readResponsePdu(
       ModbusSerialResponse response, Duration timeout);
 

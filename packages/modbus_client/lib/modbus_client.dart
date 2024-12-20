@@ -6,6 +6,7 @@ import 'dart:typed_data';
 
 export 'src/modbus_client.dart';
 export 'src/modbus_request.dart';
+export 'src/modbus_response.dart';
 export 'src/modbus_element.dart';
 export 'src/modbus_app_logger.dart';
 export 'src/serial/modbus_client_serial.dart';
@@ -169,7 +170,7 @@ enum ModbusEndianness {
     }
   }
 
-  Uint8List getEndianBytesUint8(Uint8List bytes) {
+  Uint8List getEndianBytes(Uint8List bytes) {
     var len = bytes.lengthInBytes;
     if (swapWord && swapByte) {
       for (int i = 0; i < len ~/ 2; i++) {
@@ -197,10 +198,14 @@ enum ModbusEndianness {
     return bytes;
   }
 
-  Uint16List getEndianBytes(Uint16List words) {
+  Uint16List getEndianWords(Uint16List words) {
     return Uint16List.view(
-      getEndianBytesUint8(Uint8List.view(words.buffer)).buffer,
+      getEndianBytes(Uint8List.view(words.buffer)).buffer,
     );
+  }
+
+  Uint8List getEndianBytesFromWords(Uint16List words) {
+    return getEndianBytes(Uint8List.view(words.buffer));
   }
 }
 

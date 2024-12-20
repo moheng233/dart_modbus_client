@@ -23,7 +23,7 @@ sealed class ModbusNumRegister<T extends num> extends ModbusElement<T> {
       super.description,
       required super.type,
       required super.address,
-      required super.byteCount,
+      required super.wordCount,
       this.uom = "",
       this.multiplier = 1,
       this.offset = 0,
@@ -39,7 +39,7 @@ sealed class AbsModbusIntRegister extends ModbusNumRegister<int> {
     required super.name,
     required super.type,
     required super.address,
-    required super.byteCount,
+    required super.wordCount,
     super.description,
     super.uom,
     super.multiplier,
@@ -54,7 +54,7 @@ sealed class AbsModbusIntRegister extends ModbusNumRegister<int> {
 
   @override
   int decodeValue(Uint16List raw) =>
-      ((_fromBytes(endianness.getEndianBytes(raw)) * multiplier) + offset)
+      ((_fromBytes(endianness.getEndianWords(raw)) * multiplier) + offset)
           .toInt();
 }
 
@@ -63,7 +63,7 @@ sealed class AbsModbusDoubleRegister extends ModbusNumRegister<double> {
     required super.name,
     required super.type,
     required super.address,
-    required super.byteCount,
+    required super.wordCount,
     super.description,
     super.uom,
     super.multiplier,
@@ -74,11 +74,11 @@ sealed class AbsModbusDoubleRegister extends ModbusNumRegister<double> {
 
   @override
   Uint16List encodeValue(double value) => endianness
-      .getEndianBytes(_toBytes(((value - offset) ~/ multiplier).toDouble()));
+      .getEndianWords(_toBytes(((value - offset) ~/ multiplier).toDouble()));
 
   @override
   double decodeValue(Uint16List raw) =>
-      ((_fromBytes(endianness.getEndianBytes(raw)) * multiplier) + offset)
+      ((_fromBytes(endianness.getEndianWords(raw)) * multiplier) + offset)
           .toDouble();
 }
 
@@ -94,15 +94,15 @@ final class ModbusInt16Register extends AbsModbusIntRegister {
       super.offset,
       super.viewDecimalPlaces,
       super.endianness})
-      : super(byteCount: 2);
+      : super(wordCount: 1);
 
   @override
-  int _fromBytes(Uint16List bytes) => ByteData.view(bytes.buffer, 0, byteCount)
+  int _fromBytes(Uint16List bytes) => ByteData.view(bytes.buffer, 0, wordCount)
       .getInt16(0, endianness.swapByte ? Endian.little : Endian.big);
 
   @override
   Uint16List _toBytes(dynamic value) =>
-      Uint16List(byteCount)..buffer.asByteData().setInt16(0, value);
+      Uint16List(wordCount)..buffer.asByteData().setInt16(0, value);
 }
 
 /// An unsigned 16 bit register
@@ -117,7 +117,7 @@ final class ModbusUint16Register extends AbsModbusIntRegister {
       super.offset,
       super.viewDecimalPlaces,
       super.endianness})
-      : super(byteCount: 2);
+      : super(wordCount: 1);
 
   @override
   int _fromBytes(Uint16List bytes) => bytes.buffer
@@ -126,7 +126,7 @@ final class ModbusUint16Register extends AbsModbusIntRegister {
 
   @override
   Uint16List _toBytes(dynamic value) =>
-      Uint16List(byteCount)..buffer.asByteData().setUint16(0, value);
+      Uint16List(wordCount)..buffer.asByteData().setUint16(0, value);
 }
 
 /// A signed 32 bit register
@@ -141,14 +141,14 @@ final class ModbusInt32Register extends AbsModbusIntRegister {
       super.offset,
       super.viewDecimalPlaces,
       super.endianness})
-      : super(byteCount: 4);
+      : super(wordCount: 2);
 
   @override
   int _fromBytes(Uint16List bytes) => bytes.buffer.asByteData().getInt32(0);
 
   @override
   Uint16List _toBytes(dynamic value) =>
-      Uint16List(byteCount)..buffer.asByteData().setInt32(0, value);
+      Uint16List(wordCount)..buffer.asByteData().setInt32(0, value);
 }
 
 /// An unsigned 32 bit register
@@ -163,14 +163,14 @@ final class ModbusUint32Register extends AbsModbusIntRegister {
       super.offset,
       super.viewDecimalPlaces,
       super.endianness})
-      : super(byteCount: 4);
+      : super(wordCount: 2);
 
   @override
   int _fromBytes(Uint16List bytes) => bytes.buffer.asByteData().getUint32(0);
 
   @override
   Uint16List _toBytes(dynamic value) =>
-      Uint16List(byteCount)..buffer.asByteData().setUint32(0, value);
+      Uint16List(wordCount)..buffer.asByteData().setUint32(0, value);
 }
 
 /// A signed 64 bit register
@@ -185,14 +185,14 @@ final class ModbusInt64Register extends AbsModbusIntRegister {
       super.offset,
       super.viewDecimalPlaces,
       super.endianness})
-      : super(byteCount: 8);
+      : super(wordCount: 4);
 
   @override
   int _fromBytes(Uint16List bytes) => bytes.buffer.asByteData().getInt64(0);
 
   @override
   Uint16List _toBytes(dynamic value) =>
-      Uint16List(byteCount)..buffer.asByteData().setInt64(0, value);
+      Uint16List(wordCount)..buffer.asByteData().setInt64(0, value);
 }
 
 /// An unsigned 64 bit register
@@ -207,14 +207,14 @@ final class ModbusUint64Register extends AbsModbusIntRegister {
       super.offset,
       super.viewDecimalPlaces,
       super.endianness})
-      : super(byteCount: 8);
+      : super(wordCount: 4);
 
   @override
   int _fromBytes(Uint16List bytes) => bytes.buffer.asByteData().getUint64(0);
 
   @override
   Uint16List _toBytes(dynamic value) =>
-      Uint16List(byteCount)..buffer.asByteData().setUint64(0, value);
+      Uint16List(wordCount)..buffer.asByteData().setUint64(0, value);
 }
 
 /// A 32 bit Float register
@@ -229,7 +229,7 @@ final class ModbusFloatRegister extends AbsModbusDoubleRegister {
       super.offset,
       super.viewDecimalPlaces,
       super.endianness})
-      : super(byteCount: 4);
+      : super(wordCount: 2);
 
 
   @override
@@ -238,7 +238,7 @@ final class ModbusFloatRegister extends AbsModbusDoubleRegister {
 
   @override
   Uint16List _toBytes(dynamic value) =>
-      Uint16List(byteCount)..buffer.asByteData().setFloat32(0, value);
+      Uint16List(wordCount)..buffer.asByteData().setFloat32(0, value);
 }
 
 /// A 64 bit Double register
@@ -253,7 +253,7 @@ final class ModbusDoubleRegister extends AbsModbusDoubleRegister {
       super.offset,
       super.viewDecimalPlaces,
       super.endianness})
-      : super(byteCount: 8);
+      : super(wordCount: 4);
 
   @override
   double _fromBytes(Uint16List bytes) =>
@@ -261,5 +261,5 @@ final class ModbusDoubleRegister extends AbsModbusDoubleRegister {
 
   @override
   Uint16List _toBytes(dynamic value) =>
-      Uint16List(byteCount)..buffer.asByteData().setFloat64(0, value);
+      Uint16List(wordCount)..buffer.asByteData().setFloat64(0, value);
 }

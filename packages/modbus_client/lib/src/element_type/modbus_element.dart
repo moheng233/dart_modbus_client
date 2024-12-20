@@ -1,8 +1,11 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../modbus_client.dart';
 
 /// The base element class
+@immutable
 abstract class ModbusElement<T> {
   final String name;
   final String description;
@@ -10,14 +13,14 @@ abstract class ModbusElement<T> {
   final int address;
   final ModbusEndianness endianness;
 
-  final int byteCount;
+  final int wordCount;
 
   const ModbusElement({
     required this.name,
     this.description = "",
     required this.type,
     required this.address,
-    required this.byteCount,
+    required this.wordCount,
     this.endianness = ModbusEndianness.ABCD,
   });
 
@@ -28,7 +31,7 @@ abstract class ModbusElement<T> {
     ByteData.view(pdu.buffer)
       ..setUint8(0, type.readFunction.code)
       ..setUint16(1, address)
-      ..setUint16(3, byteCount > 1 ? byteCount ~/ 2 : 1);
+      ..setUint16(3, wordCount);
     return ModbusReadRequest(this, pdu, type.readFunction,
         unitId: unitId,
         responseTimeout: responseTimeout,
@@ -54,7 +57,7 @@ abstract class ModbusElement<T> {
     final raw = encodeValue(value);
 
     // Build the request object
-    final pdu = Uint8List(2 + (byteCount * 2));
+    final pdu = Uint8List(2 + (wordCount * 2));
     ByteData.view(pdu.buffer)
       ..setUint8(0, type.writeSingleFunction!.code)
       ..setUint16(1, address)
@@ -75,18 +78,18 @@ abstract class ModbusElement<T> {
           msg: "$type element does not support multiple write request!");
     }
     // Build the request object
-    var pdu = Uint8List(6 + bytes.length);
+    var pdu = Uint8List(6 + bytes.length * 2);
     pdu.setAll(
       6,
       endianness == null
-          ? bytes
-          : endianness.getEndianBytesUint8(Uint8List.view(bytes.buffer)),
+          ? Uint8List.view(bytes.buffer)
+          : endianness.getEndianBytesFromWords(bytes),
     );
     ByteData.view(pdu.buffer)
       ..setUint8(0, type.writeMultipleFunction!.code)
       ..setUint16(1, address)
-      ..setUint16(3, bytes.length ~/ 2) // value register count
-      ..setUint8(5, bytes.length); // value byte count
+      ..setUint16(3, bytes.length) // value register count
+      ..setUint8(5, bytes.length * 2); // value byte count
     return ModbusWriteRequest(this, pdu, type.writeMultipleFunction!,
         unitId: unitId,
         responseTimeout: responseTimeout,

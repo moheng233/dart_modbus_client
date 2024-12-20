@@ -16,7 +16,7 @@ class ModbusBitMask {
 
 /// This Uint16 register type sets the value of a list of [ModbusBitMask]
 /// objects.
-class ModbusBitMaskRegister extends ModbusElement<int> {
+final class ModbusBitMaskRegister extends ModbusElement<int> {
   final List<ModbusBitMask> bitMasks;
 
   const ModbusBitMaskRegister(
@@ -25,7 +25,7 @@ class ModbusBitMaskRegister extends ModbusElement<int> {
       required super.type,
       super.description,
       required this.bitMasks})
-      : super(byteCount: 2);
+      : super(wordCount: 1);
 
   @override
   int decodeValue(Uint16List raw) {

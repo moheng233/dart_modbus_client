@@ -9,7 +9,7 @@ enum ModbusEpochType { seconds, milliseconds }
 // TODO: lets have a uint64 register for the milliseconds implementation!
 
 /// This Uint32 register type converts the device epoch value into a [DateTime].
-class ModbusEpochRegister extends ModbusElement<DateTime> {
+final class ModbusEpochRegister extends ModbusElement<DateTime> {
   final bool isUtc;
   final ModbusEpochType epochType = ModbusEpochType.seconds;
 
@@ -19,7 +19,7 @@ class ModbusEpochRegister extends ModbusElement<DateTime> {
       required super.type,
       super.description,
       this.isUtc = false})
-      : super(byteCount: 4);
+      : super(wordCount: 2);
 
   @override
   DateTime decodeValue(Uint16List raw) {

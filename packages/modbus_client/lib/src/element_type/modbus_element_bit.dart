@@ -5,13 +5,13 @@ import 'modbus_element.dart';
 
 /// A Modbus bit value element. This is the base class of [ModbusDiscreteInput]
 /// and [ModbusCoil] elements.
-class ModbusBitElement extends ModbusElement<bool> {
+sealed class ModbusBitElement extends ModbusElement<bool> {
   const ModbusBitElement({
     required super.name,
     super.description,
     required super.address,
     required super.type,
-  }) : super(byteCount: 1);
+  }) : super(wordCount: 1);
 
   @override
   Uint16List encodeValue(bool value) =>
@@ -29,7 +29,7 @@ class ModbusBitElement extends ModbusElement<bool> {
 }
 
 /// A Modbus [ModbusElementType.discreteInput] value element.
-class ModbusDiscreteInput extends ModbusBitElement {
+final class ModbusDiscreteInput extends ModbusBitElement {
   ModbusDiscreteInput({
     required super.name,
     super.description,
@@ -38,7 +38,7 @@ class ModbusDiscreteInput extends ModbusBitElement {
 }
 
 /// A Modbus [ModbusElementType.coil] value element.
-class ModbusCoil extends ModbusBitElement {
+final class ModbusCoil extends ModbusBitElement {
   ModbusCoil({
     required super.name,
     super.description,

@@ -3,9 +3,11 @@ import 'dart:typed_data';
 import 'modbus_element.dart';
 
 /// A Modbus enumeration type used by [ModbusEnumRegister]
-abstract class ModbusIntEnum {
+abstract interface class ModbusIntEnum {
   int get intValue;
 }
+
+
 
 /// An enumeration register. The Uin16 register value is converted into a user
 /// defined enumeration.
@@ -26,7 +28,7 @@ abstract class ModbusIntEnum {
 ///     name: "BatteryStatus",
 ///     address: 37000,
 ///     enumValues: BatteryStatus.values);
-class ModbusEnumRegister<T extends ModbusIntEnum> extends ModbusElement<T> {
+final class ModbusEnumRegister<T extends ModbusIntEnum> extends ModbusElement<T> {
   final List<T> enumValues;
   final T? defaultValue;
 
@@ -37,7 +39,7 @@ class ModbusEnumRegister<T extends ModbusIntEnum> extends ModbusElement<T> {
       super.description,
       required this.enumValues,
       this.defaultValue})
-      : super(byteCount: 2);
+      : super(wordCount: 1);
 
   @override
   T decodeValue(Uint16List raw) {

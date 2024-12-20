@@ -97,7 +97,7 @@ final class ModbusReadRequest extends ModbusElementRequest {
       {super.unitId, super.responseTimeout, super.endianness});
 
   @override
-  int get responsePduLength => 2 + element.byteCount;
+  int get responsePduLength => 2 + element.wordCount;
 }
 
 /// A write request of a single element.
