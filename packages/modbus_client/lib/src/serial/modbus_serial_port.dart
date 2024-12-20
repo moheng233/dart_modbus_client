@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 /// Abstract serial port client
-abstract class ModbusSerialPort {
+abstract interface class ModbusSerialPort {
   /// The serial port name
   String get name;
 
